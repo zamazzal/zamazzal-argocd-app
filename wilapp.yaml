@@ -1,47 +1,34 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: wilapp
+  name: wil-playground
   labels:
-    app: wilapp
-    tier: wilapp
+    app: wil-playground
 spec:
-  # comment or delete the following line if you want to use a LoadBalancer
   type: NodePort 
-  # if your cluster supports it, uncomment the following to automatically create
-  # an external load-balanced IP for the frontend service.
-  # type: LoadBalancer
   ports:
-  - port: 80
+    - protocol: TCP
+      port: 80
+      targetPort: 8888
   selector:
-    app: wilapp
-    tier: wilapp
+    app: wil-playground
 ---
-apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wilapp
+  name: wil-playground
 spec:
   selector:
     matchLabels:
-      app: wilapp
-      tier: wilapp
-  replicas: 2
+      app: wil-playground
+  replicas: 1
   template:
     metadata:
       labels:
-        app: wilapp
-        tier: wilapp
+        app: wil-playground
     spec:
       containers:
-      - name: wilapp
-        image: docker pull wil42/playground:v1
-        resources:
-          requests:
-            cpu: 500m
-            memory: 500Mi
-        env:
-        - name: Version
-          value: V1
+      - name: wil-playground
+        image: wil42/playground:v1
         ports:
         - containerPort: 80
