@@ -28,6 +28,6 @@ spec:
     spec:
       containers:
       - name: wil-playground
-        image: ngnix
+        image: ubuntu/apache2
         ports:
         - containerPort: 80
