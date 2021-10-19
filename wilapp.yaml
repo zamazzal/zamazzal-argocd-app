@@ -1,52 +1,33 @@
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-nginx
+  name: wil-playground
   labels:
-    run: my-nginx
+    app: wil-playground
 spec:
+  type: NodePort 
   ports:
-  - port: 80
-    protocol: TCP
+    - protocol: TCP
+      port: 8888
   selector:
-    run: my-nginx
+    app: wil-playground
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-nginx
+  name: wil-playground
 spec:
   selector:
     matchLabels:
-      run: my-nginx
+      app: wil-playground
   replicas: 1
   template:
     metadata:
       labels:
-        run: my-nginx
+        app: wil-playground
     spec:
       containers:
-      - name: my-nginx
-        image: nginx
+      - name: wil-playground
+        image: wil42/playground:v1
         ports:
-        - containerPort: 80
----
-# apiVersion: networking.k8s.io/v1beta1 # for k3s < v1.19
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: nginx
-  annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: nginx
-            port:
-              number: 80
+        - containerPort: 8888
